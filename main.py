@@ -11,7 +11,6 @@ from uploader import Uploader
 dp = Dispatcher(config.bot)
 
 
-@dp.async_task
 async def send_file(chat_id, file_path):
     temp_dir = config.TMP_FILES_DIR + Uploader.get_random_dir_name()
     file = await config.storage.get_pack_by_path(file_path)
