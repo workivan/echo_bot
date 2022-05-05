@@ -12,9 +12,9 @@ dp = Dispatcher(config.bot)
 
 
 async def send_file(chat_id, file_path):
-    temp_dir = config.TMP_FILES_DIR + Uploader.get_random_dir_name()
     file = await config.storage.get_pack_by_path(file_path)
     if file:
+        temp_dir = config.TMP_FILES_DIR + Uploader.get_random_dir_name()
         os.mkdir(temp_dir)
         with ZipFile(temp_dir + '/' + file.name + '.zip', 'w') as zf:
             for wav in Path(file.path).rglob('*'):
@@ -26,6 +26,11 @@ async def send_file(chat_id, file_path):
             document=open(temp_dir + '/' + file.name + '.zip', 'rb')
         )
         shutil.rmtree(temp_dir + '/', ignore_errors=True)
+    await config.bot.send_audio(
+            chat_id,
+            audio=open(file_path.strip(), 'rb')
+    )
+
 
 
 @dp.message_handler(commands=['start'])
@@ -33,6 +38,7 @@ async def send_welcome(message: types.Message):
     chat_id = message.chat.id
     await config.storage.add_sub(message.chat.id)
     await message.reply("Вы подписаны на библиотеку")
+    await config.main_bot.send_message(message.chat.id, "Теперь все ваши звуки будут загружаться в библиотеку")
     pays = await config.storage.get_pays(chat_id)
     if len(pays) > 0:
         await config.bot.send_message(
