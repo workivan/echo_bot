@@ -15,8 +15,6 @@ DB_NAME = 'sound_market'
 DB_USER_PASSWORD = 'Pabotahard1$'
 DB_URL = f"postgresql://{DB_USER}:{DB_USER_PASSWORD}@localhost:5432/{DB_NAME}"
 
-
-
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 TMP_FILES_DIR = ROOT_DIR + "/upload/"
 

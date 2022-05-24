@@ -26,11 +26,11 @@ async def send_file(chat_id, file_path):
             document=open(temp_dir + '/' + file.name + '.zip', 'rb')
         )
         shutil.rmtree(temp_dir + '/', ignore_errors=True)
+        return
     await config.bot.send_audio(
-            chat_id,
-            audio=open(file_path.strip(), 'rb')
+        chat_id,
+        audio=open(file_path.strip(), 'rb')
     )
-
 
 
 @dp.message_handler(commands=['start'])
@@ -52,16 +52,12 @@ async def send_welcome(message: types.Message):
 
 async def on_startup(dp):
     await config.storage.init(config.DB_URL)
-    # await config.bot.set_webhook(config.WEBHOOK_URL)
 
 
 async def on_shutdown(dp):
-    # await config.bot.delete_webhook()
     await dp.storage.close()
     await dp.storage.wait_closed()
 
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown)
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
